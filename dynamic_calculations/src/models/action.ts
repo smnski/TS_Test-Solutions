@@ -1,7 +1,7 @@
 import Role from "./role";
 
 import { dbClient, TableNames } from "../common/db";
-import Handler from "../handlers/handlerAssigner";
+import HandlerAssigner from "../handlers/handlerAssigner";
 
 export class Action {
   id;
@@ -16,7 +16,7 @@ export class Action {
     this.parentRule = input.parentRule;
     this.parentRuleId = input.parentRuleId;
     this.role = Role.from(input.role);
-    this.handler = Handler.from(input.handler);
+    this.handler = HandlerAssigner.from(input.handler);
   }
 
   static async getById(id) {
