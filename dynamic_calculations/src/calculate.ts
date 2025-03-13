@@ -1,5 +1,6 @@
 import { EventPayload } from "./types";
 import { Action } from "./models/action";
+import { dbClient, TableNames } from  "./common/db";
 
 async function calculate(event: EventPayload) {
 
@@ -13,9 +14,11 @@ async function calculate(event: EventPayload) {
 
   console.log("actionid: ", actionid); //debug
 
-  const fullAction = await Action.getByPk(actionid);
+  const allActions = await dbClient.scan({ TableName: TableNames.actions }).promise();
+  console.log("All actions in DB:", JSON.stringify(allActions, null, 2));
 
-  console.log("fullAction: ", fullAction); //debug
+  const action = await dbClient.get({ TableName: TableNames.actions, Key: { pk: actionid } }).promise();
+  console.log("Retrieved action:", action);
 
   return {};
 }
