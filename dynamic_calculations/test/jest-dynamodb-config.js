@@ -5,7 +5,7 @@ const config = {
       KeySchema: [{ AttributeName: "pk", KeyType: "HASH" }],
       AttributeDefinitions: [
         { AttributeName: "pk", AttributeType: "S" },
-        { AttributeName: "parent", AttributeType: "S" },
+        { AttributeName: "parentPk", AttributeType: "S" },
       ],
       ProvisionedThroughput: {
         ReadCapacityUnits: 1,
@@ -16,7 +16,7 @@ const config = {
           IndexName: "parent-index",
           KeySchema: [
             {
-              AttributeName: "parent",
+              AttributeName: "parentPk",
               KeyType: "HASH",
             },
           ],

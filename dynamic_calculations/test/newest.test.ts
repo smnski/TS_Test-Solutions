@@ -28,7 +28,7 @@ beforeAll(async () => {
       TableName: TableNames.actions,
       Item: {
         pk: "2",
-        parentActionId: "1",
+        parentPk: "1",
         data: { timestamp: new Date(2020, 1, 1), color: "red", type: "painting" },
       },
     })
@@ -39,7 +39,7 @@ beforeAll(async () => {
       TableName: TableNames.actions,
       Item: {
         pk: "3",
-        parentActionId: "1",
+        parentPk: "1",
         data: { timestamp: new Date(2010, 1, 1), color: "blue", image: "none" },
       },
     })
