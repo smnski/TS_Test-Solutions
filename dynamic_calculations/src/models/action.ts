@@ -15,6 +15,7 @@ export class Action {
     this.parentPk = input.parentPk;
     this.role = Role.from(input.role);
     this.handler = HandlerAssigner.from(input.handler);
+    this.data = input.data;
   }
 
   static async getByPk(pk) {

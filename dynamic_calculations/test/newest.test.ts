@@ -29,7 +29,7 @@ beforeAll(async () => {
       Item: {
         pk: "2",
         parentPk: "1",
-        data: { timestamp: new Date(2020, 1, 1), color: "red", type: "painting" },
+        data: { timestamp: new Date(2020, 1, 1).getTime(), color: "red", type: "painting" },
       },
     })
     .promise();
@@ -40,7 +40,7 @@ beforeAll(async () => {
       Item: {
         pk: "3",
         parentPk: "1",
-        data: { timestamp: new Date(2010, 1, 1), color: "blue", image: "none" },
+        data: { timestamp: new Date(2010, 1, 1).getTime(), color: "blue", image: "none" },
       },
     })
     .promise();
