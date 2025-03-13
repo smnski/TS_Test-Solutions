@@ -3,8 +3,8 @@ import Newest from "./newest";
 
 class HandlerAssigner {
   static from(input) {
-    if (input.rule === "COUNTER") return Counter;
-    if (input.rule === "NEWEST") return Newest;
+    if (input.role === "COUNTER") return Counter;
+    if (input.role === "NEWEST") return Newest;
   }
 }
 
