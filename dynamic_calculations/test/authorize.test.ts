@@ -3,7 +3,7 @@ import { test, expect } from "@jest/globals";
 
 import { dbClient, TableNames, UserRoles } from "./../src/common/db";
 
-test("Disallowed", async () => {
+test("Allowed", async () => {
   await dbClient
     .put({
       TableName: TableNames.users,
@@ -20,7 +20,7 @@ test("Disallowed", async () => {
       Item: {
         pk: "1",
         handler: "COUNTER",
-        ROLE: UserRoles.basicuser,
+        role: UserRoles.basicuser,
       },
     })
     .promise();
@@ -30,10 +30,9 @@ test("Disallowed", async () => {
     body: JSON.stringify({ actionid: "1" }),
   });
 
-  expect(statusCode).toBe(403);
+  expect(statusCode).toBe(200);
 
   // remove test items
-
   await dbClient
     .delete({
       TableName: TableNames.users,
@@ -53,12 +52,12 @@ test("Disallowed", async () => {
     .promise();
 });
 
-test("Allowed", async () => {
+test("Disallowed", async () => {
   await dbClient
     .put({
       TableName: TableNames.users,
       Item: {
-        pk: "123",
+        pk: "234",
         role: UserRoles.enterprise,
       },
     })
@@ -70,7 +69,7 @@ test("Allowed", async () => {
       Item: {
         pk: "1",
         handler: "COUNTER",
-        ROLE: UserRoles.sysadmin,
+        role: UserRoles.sysadmin,
       },
     })
     .promise();
@@ -80,8 +79,9 @@ test("Allowed", async () => {
     body: JSON.stringify({ actionid: "1" }),
   });
 
-  expect(statusCode).toBe(200);
+  expect(statusCode).toBe(403);
 
+  // remove test items
   await dbClient
     .delete({
       TableName: TableNames.users,
