@@ -20,8 +20,7 @@ export class Action {
   }
 
   static async getById(id) {
-    const res = (await dbClient.get({ TableName: TableNames.authRules, Key: { pk: id } }).promise())
-      .Item;
+    const res = (await dbClient.get({ TableName: TableNames.actions, Key: { pk: id } }).promise())
 
     if (!res.Item) {
       throw new Error("Action does not exist");
