@@ -20,8 +20,7 @@ async function calculate(event: EventPayload) {
   const action = await Action.getByPk(actionid);
   console.log("action: ", action);
   const childrenActions = await action.getChildActions();
-  console.log("childrenActions: ", childrenActions);
-  //const action = await dbClient.get({ TableName: TableNames.actions, Key: { pk: actionid } }).promise();
+  //console.log("childrenActions: ", childrenActions); //debug
 
   return {};
 }

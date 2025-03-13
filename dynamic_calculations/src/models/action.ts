@@ -7,16 +7,17 @@ export class Action {
   id;
   pk;
   parentActionId;
-  parentRule;
-  parentRuleId;
+  parentRole;
+  parentRoleId;
   role;
   handler;
 
   constructor(input) {
     this.id = input.id;
     this.pk = input.pk;
-    this.parentRule = input.parentRule;
-    this.parentRuleId = input.parentRuleId;
+    this.parentActionId = input.parentActionId;
+    this.parentRole = input.parentRole;
+    this.parentRoleId = input.parentRoleId;
     this.role = Role.from(input.role);
     this.handler = HandlerAssigner.from(input.handler);
   }
@@ -45,7 +46,7 @@ export class Action {
   async getParentAction() {
     const res = (
       await dbClient
-        .get({ TableName: TableNames.actions, Key: { pk: this.parentRuleId } })
+        .get({ TableName: TableNames.actions, Key: { pk: this.parentActionId } })
         .promise()
     ).Item;
 
@@ -60,15 +61,23 @@ export class Action {
     const res = await dbClient
       .query({
         TableName: TableNames.actions,
-        IndexName: "parent-index",
-        ExclusiveStartKey: { pk: this.parentActionId },
+        IndexName: "parent-index", // Ensure this index has the correct partition key and sort key
+        KeyConditionExpression: "parentActionId = :parentActionId", // Query where parentActionId matches the current action's pk
+        ExpressionAttributeValues: {
+          ":parentActionId": this.pk, // Use the current action's pk as the parentActionId value
+        },
       })
       .promise();
-
-    if (!res.Items) {
-      throw new Error("Action does not exist");
+  
+    console.log("getChildActions res: ", res); // debug
+  
+    if (!res.Items || res.Items.length === 0) {
+      throw new Error("Child actions do not exist");
     }
-
-    return res.Items.map((item) => new Action(item));
+  
+    return res.Items.map((item) => new Action(item)); // Map results to Action instances
   }
+  
+  
+  
 }
