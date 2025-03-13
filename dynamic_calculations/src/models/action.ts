@@ -1,7 +1,7 @@
 import Role from "./role";
 
 import { dbClient, TableNames } from "../common/db";
-import Handler from "../handlers/index";
+import Handler from "../handlers/handlerAssigner";
 
 export class Action {
   id;
