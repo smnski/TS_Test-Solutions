@@ -5,6 +5,7 @@ import HandlerAssigner from "../handlers/handlerAssigner";
 
 export class Action {
   id;
+  pk;
   parentActionId;
   parentRule;
   parentRuleId;
@@ -13,6 +14,7 @@ export class Action {
 
   constructor(input) {
     this.id = input.id;
+    this.pk = input.pk;
     this.parentRule = input.parentRule;
     this.parentRuleId = input.parentRuleId;
     this.role = Role.from(input.role);
@@ -21,6 +23,17 @@ export class Action {
 
   static async getById(id) {
     const res = (await dbClient.get({ TableName: TableNames.actions, Key: { pk: id } }).promise())
+
+    if (!res.Item) {
+      throw new Error("Action does not exist");
+    }
+
+    return new Action(res.Item);
+  }
+
+  static async getByPk(pk) {
+    const res = await dbClient.get({ TableName: TableNames.actions, Key: { pk: pk } }).promise();
+    console.log("action.ts, res: ", res); //debug
 
     if (!res.Item) {
       throw new Error("Action does not exist");

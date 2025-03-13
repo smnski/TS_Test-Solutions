@@ -17,8 +17,11 @@ async function calculate(event: EventPayload) {
   const allActions = await dbClient.scan({ TableName: TableNames.actions }).promise();
   console.log("All actions in DB:", JSON.stringify(allActions, null, 2));
 
-  const action = await dbClient.get({ TableName: TableNames.actions, Key: { pk: actionid } }).promise();
-  console.log("Retrieved action:", action);
+  const action = await Action.getByPk(actionid);
+  console.log("action: ", action);
+  const childrenActions = await action.getChildActions();
+  console.log("childrenActions: ", childrenActions);
+  //const action = await dbClient.get({ TableName: TableNames.actions, Key: { pk: actionid } }).promise();
 
   return {};
 }
