@@ -9,11 +9,19 @@ const handler = async function (event): Promise<any> {
   const headers = event.Headers;
   const body = event.body;
 
+  // used for validation later
   const userid = headers.userid;
   const { actionid } = JSON.parse(body);
 
-  await calculate(event);
-  return;
+  try {
+    return await calculate(event);
+  } catch (error) {
+    console.error("Handler Error:", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Internal Server Error" }),
+    };
+  }
 };
 
 export default handler;
