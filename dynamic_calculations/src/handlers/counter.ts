@@ -2,13 +2,11 @@
 
 class Counter {
   static handle(...sources) {
-    return (sources || []).reduce(
-      (acc) => ({
+    return sources.reduce(
+      (acc, curr) => ({
         result: acc.result + 1,
       }),
-      {
-        result: 0,
-      },
+      { result: 0 }
     );
   }
 }
