@@ -55,6 +55,17 @@ beforeAll(async () => {
       },
     })
     .promise();
+
+    await dbClient
+    .put({
+      TableName: TableNames.actions,
+      Item: {
+        pk: "5",
+        parentPk: "3",
+        data: { timestamp: new Date(2005, 1, 1).getTime(), color: "purple", image: "none" },
+      },
+    })
+    .promise();
 });
 
 test("Some items to count", async () => {

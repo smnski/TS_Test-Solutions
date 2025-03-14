@@ -1,29 +1,27 @@
 import { EventPayload } from "./types";
 import { Action } from "./models/action";
 
-async function processRecursively(actions: Action[], parentAction: Action): Promise<Action[]> {
-  if (actions.length === 1) {
-    if(actions[0].getParentAction === null) {
-      return actions;
-    }
-  }
-
+async function processRecursively(actions: Action[]): Promise<void> {
   for (const action of actions) {
     const children = await action.getChildActions();
-    console.log("children: ", children);
-    parentAction.result = "aaa";
-    return processRecursively(children, action);
+    if (children.length > 0) {
+      await processRecursively(children);
+      let concatenated = "";
+      for (const child of children) {
+        concatenated += child.result;
+      }
+      action.result = concatenated;
+    } else {
+      action.result = "a";
+    }
   }
 }
 
-
 async function calculate(event: EventPayload) {
-  const { Headers, body } = event;
-  const { actionid } = JSON.parse(body);
+  const { actionid } = JSON.parse(event.body);
   const action = await Action.getByPk(actionid);
-  const res = await processRecursively([action], action);
-  console.log("res: ", res[0]); //debug
-  
+  await processRecursively([action]);
+  console.log("result: ", action.result);
   return {};
 }
 
