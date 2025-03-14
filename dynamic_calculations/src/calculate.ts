@@ -1,16 +1,15 @@
 import { EventPayload } from "./types";
 import { Action } from "./models/action";
 
-async function processRecursively(action: Action): Promise<string> {
+async function processRecursively(action: Action): Promise<Action | null> {
   const children = await action.getChildActions();
+  
   if (children.length > 0) {
-    let concatenated = "";
-    for (const child of children) {
-      concatenated += await processRecursively(child);
-    }
-    return concatenated;
+    const childResults = await Promise.all(children.map(processRecursively));
+    const validChildren = childResults.length > 0 ? childResults : [action]; 
+    return action.handler.handle(validChildren);
   } else {
-    return "a";
+    return action;
   }
 }
 
@@ -19,7 +18,7 @@ async function calculate(event: EventPayload) {
   const action = await Action.getByPk(actionid);
   const result = await processRecursively(action);
   console.log("result: ", result);
-  return {};
+  return { data: result.data };
 }
 
 export default calculate;

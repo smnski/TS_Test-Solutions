@@ -40,6 +40,7 @@ beforeAll(async () => {
       Item: {
         pk: "3",
         parentPk: "1",
+        handler: "NEWEST",
         data: { timestamp: new Date(2010, 1, 1).getTime(), color: "blue", image: "none" },
       },
     })
@@ -77,8 +78,8 @@ test("Some items to count", async () => {
   });
 
   expect(body).toStrictEqual({
-    timestamp: new Date(2010, 1, 1),
-    color: "blue",
+    timestamp: new Date(2023, 1, 1).getTime(), //remove getTime later
+    color: "yellow",
     image: "none",
   });
 });
