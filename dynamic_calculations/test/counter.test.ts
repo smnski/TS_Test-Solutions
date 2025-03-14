@@ -25,22 +25,59 @@ beforeAll(async () => {
     .promise();
 });
 
-test("No items to count", async () => {
-  const { body } = await handler({
-    Headers: { userid: "123" },
-    body: JSON.stringify({ actionid: "1" }),
-  });
-
-  expect(body).toStrictEqual({ result: 0 });
-});
-
 test("Some items to count", async () => {
+
   await dbClient
     .put({
       TableName: "actions",
       Item: {
         pk: "2",
-        parentActionId: "1",
+        parentPk: "1",
+        data: {},
+      },
+    })
+    .promise();
+
+    await dbClient
+    .put({
+      TableName: "actions",
+      Item: {
+        pk: "3",
+        parentPk: "1",
+        handler: "COUNTER",
+        data: {},
+      },
+    })
+    .promise();
+
+    await dbClient
+    .put({
+      TableName: "actions",
+      Item: {
+        pk: "4",
+        parentPk: "3",
+        data: {},
+      },
+    })
+    .promise();
+
+    await dbClient
+    .put({
+      TableName: "actions",
+      Item: {
+        pk: "5",
+        parentPk: "3",
+        data: {},
+      },
+    })
+    .promise();
+
+    await dbClient
+    .put({
+      TableName: "actions",
+      Item: {
+        pk: "6",
+        parentPk: "3",
         data: {},
       },
     })
@@ -51,5 +88,5 @@ test("Some items to count", async () => {
     body: JSON.stringify({ actionid: "1" }),
   });
 
-  expect(body).toStrictEqual({ result: 1 });
+  expect(body).toStrictEqual({ result: 4 });
 });
