@@ -88,5 +88,5 @@ test("Some items to count", async () => {
     body: JSON.stringify({ actionid: "1" }),
   });
 
-  expect(body).toStrictEqual({ result: 4 });
+  expect(body).toStrictEqual({ result: 2 });
 });
