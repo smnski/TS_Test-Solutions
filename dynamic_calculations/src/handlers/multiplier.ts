@@ -1,6 +1,9 @@
 class Multiplier {
   static handle(...sources) {
-    return { value: sources.flat().reduce((acc, num) => acc * num, 1) };
+    const result = sources.flat().reduce((acc, source) => acc * source.result, 1);
+    
+    console.log("Computed value: ", result); 
+    return { result: result };
   }
 }
 

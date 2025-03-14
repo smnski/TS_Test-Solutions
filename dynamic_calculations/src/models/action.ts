@@ -35,6 +35,7 @@ export class Action {
     if (!res.Items || res.Items.length === 0) {
       return [];
     }
+    console.log("Query results for parentPk = ", this.pk, ": ", res.Items);
     return res.Items.map(item => new Action(item));
   }
 

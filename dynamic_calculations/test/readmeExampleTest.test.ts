@@ -128,7 +128,7 @@ test("Some items to count", async () => {
 
   const { body } = await handler({
     Headers: { userid: "123" },
-    body: JSON.stringify({ actionid: "1" }),
+    body: JSON.stringify({ actionid: "6" }),
   });
 
   expect(body).toStrictEqual({ result: 6 });
