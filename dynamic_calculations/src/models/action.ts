@@ -8,7 +8,6 @@ export class Action {
   role;
   handler;
   data;
-  result;
 
   constructor(input) {
     this.pk = input.pk;
@@ -16,7 +15,6 @@ export class Action {
     this.role = Role.from(input.role);
     this.handler = HandlerAssigner.from(input.handler);
     this.data = input.data;
-    this.result = null;
   }
 
   static async getByPk(pk) {
