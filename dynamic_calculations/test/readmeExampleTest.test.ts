@@ -1,6 +1,6 @@
 import handler from "../index";
 import { beforeAll, afterAll, test, expect } from "@jest/globals";
-import { dbClient, TableNames, UserRoles } from "./../src/common/db";
+import { dbClient, TableNames, UserRoles } from "../src/common/db";
 
 beforeAll(async () => {
   await dbClient
@@ -17,8 +17,8 @@ beforeAll(async () => {
     .put({
       TableName: TableNames.actions,
       Item: {
-        pk: "1",
-        handler: "COUNTER",
+        pk: "6",
+        handler: "MULTIPLIER",
         ROLE: UserRoles.basicuser,
       },
     })
@@ -29,12 +29,14 @@ afterAll(async () => {
   // Delete test data after the test completes
   const deleteItems = [
     { TableName: TableNames.users, Key: { pk: "123" } },
+    { TableName: TableNames.actions, Key: { pk: "6" } },
     { TableName: TableNames.actions, Key: { pk: "1" } },
     { TableName: TableNames.actions, Key: { pk: "2" } },
     { TableName: TableNames.actions, Key: { pk: "3" } },
     { TableName: TableNames.actions, Key: { pk: "4" } },
     { TableName: TableNames.actions, Key: { pk: "5" } },
-    { TableName: TableNames.actions, Key: { pk: "6" } },
+    { TableName: TableNames.actions, Key: { pk: "7" } },
+    { TableName: TableNames.actions, Key: { pk: "8" } },
   ];
 
   await Promise.all(
@@ -45,6 +47,41 @@ afterAll(async () => {
 });
 
 test("Some items to count", async () => {
+  await dbClient
+    .put({
+      TableName: "actions",
+      Item: {
+        pk: "1",
+        parentPk: "6",
+        handler: "COUNTER",
+        data: {},
+      },
+    })
+    .promise();
+
+  await dbClient
+    .put({
+      TableName: "actions",
+      Item: {
+        pk: "4",
+        parentPk: "6",
+        handler: "COUNTER",
+        data: {},
+      },
+    })
+    .promise();
+
+  await dbClient
+    .put({
+      TableName: "actions",
+      Item: {
+        pk: "8",
+        parentPk: "1",
+        data: {},
+      },
+    })
+    .promise();
+
   await dbClient
     .put({
       TableName: "actions",
@@ -62,18 +99,6 @@ test("Some items to count", async () => {
       Item: {
         pk: "3",
         parentPk: "1",
-        handler: "COUNTER",
-        data: {},
-      },
-    })
-    .promise();
-
-  await dbClient
-    .put({
-      TableName: "actions",
-      Item: {
-        pk: "4",
-        parentPk: "3",
         data: {},
       },
     })
@@ -84,7 +109,7 @@ test("Some items to count", async () => {
       TableName: "actions",
       Item: {
         pk: "5",
-        parentPk: "3",
+        parentPk: "4",
         data: {},
       },
     })
@@ -94,8 +119,8 @@ test("Some items to count", async () => {
     .put({
       TableName: "actions",
       Item: {
-        pk: "6",
-        parentPk: "3",
+        pk: "7",
+        parentPk: "4",
         data: {},
       },
     })
@@ -106,5 +131,5 @@ test("Some items to count", async () => {
     body: JSON.stringify({ actionid: "1" }),
   });
 
-  expect(body).toStrictEqual({ result: 2 });
+  expect(body).toStrictEqual({ result: 6 });
 });

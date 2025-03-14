@@ -1,5 +1,3 @@
-// Counter returns object with `counter` property indicating how many sources were passed
-
 class Counter {
   static handle(...sources) {
     return sources.reduce(

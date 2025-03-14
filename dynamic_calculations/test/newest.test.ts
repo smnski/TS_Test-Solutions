@@ -1,5 +1,5 @@
 import handler from "../index";
-import { beforeAll, test, expect } from "@jest/globals";
+import { beforeAll, afterAll, test, expect } from "@jest/globals";
 import { dbClient, TableNames, UserRoles } from "./../src/common/db";
 
 beforeAll(async () => {
@@ -13,6 +13,7 @@ beforeAll(async () => {
       },
     })
     .promise();
+  
   await dbClient
     .put({
       TableName: TableNames.users,
@@ -46,7 +47,7 @@ beforeAll(async () => {
     })
     .promise();
 
-    await dbClient
+  await dbClient
     .put({
       TableName: TableNames.actions,
       Item: {
@@ -57,7 +58,7 @@ beforeAll(async () => {
     })
     .promise();
 
-    await dbClient
+  await dbClient
     .put({
       TableName: TableNames.actions,
       Item: {
@@ -69,6 +70,24 @@ beforeAll(async () => {
     .promise();
 });
 
+afterAll(async () => {
+  // Delete test data after the test completes
+  const deleteItems = [
+    { TableName: TableNames.users, Key: { pk: "123" } },
+    { TableName: TableNames.actions, Key: { pk: "1" } },
+    { TableName: TableNames.actions, Key: { pk: "2" } },
+    { TableName: TableNames.actions, Key: { pk: "3" } },
+    { TableName: TableNames.actions, Key: { pk: "4" } },
+    { TableName: TableNames.actions, Key: { pk: "5" } },
+  ];
+
+  await Promise.all(
+    deleteItems.map(({ TableName, Key }) =>
+      dbClient.delete({ TableName, Key }).promise()
+    )
+  );
+});
+
 test("Some items to count", async () => {
   await dbClient;
 
@@ -78,7 +97,7 @@ test("Some items to count", async () => {
   });
 
   expect(body).toStrictEqual({
-    timestamp: new Date(2023, 1, 1).getTime(), //remove getTime later
+    timestamp: new Date(2023, 1, 1).getTime(), // remove getTime later
     color: "yellow",
     image: "none",
   });
