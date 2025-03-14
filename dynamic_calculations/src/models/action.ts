@@ -39,4 +39,18 @@ export class Action {
     }
     return res.Items.map(item => new Action(item));
   }
+
+  async getParentAction() {
+    if (!this.parentPk) {
+      return null;
+    }
+    try {
+      return await Action.getByPk(this.parentPk);
+    } catch (error) {
+      if (error.message === "Action does not exist") {
+        return null;
+      }
+      throw error;
+    }
+  }
 }
