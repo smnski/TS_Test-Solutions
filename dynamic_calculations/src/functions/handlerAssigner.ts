@@ -1,6 +1,6 @@
-import Counter from "../handlers/counter";
-import Newest from "../handlers/newest";
-import Multiplier from "../handlers/multiplier";
+import { Counter } from "../handlers/counter";
+import { Newest } from "../handlers/newest";
+import { Multiplier } from "../handlers/multiplier";
 
 export class HandlerAssigner {
   static from(input: string) {

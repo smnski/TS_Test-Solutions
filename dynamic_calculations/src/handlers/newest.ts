@@ -1,6 +1,6 @@
 import { ResponseData } from "../types";
 
-class Newest {
+export class Newest {
   static handle(...sources: ResponseData[]): ResponseData {
     return sources
       .reduce((latest, current) => {
@@ -16,4 +16,3 @@ class Newest {
   }
 }
 
-export default Newest;

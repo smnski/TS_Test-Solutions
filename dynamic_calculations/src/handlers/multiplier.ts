@@ -1,6 +1,6 @@
 import { Action } from "../models/action";
 
-class Multiplier {
+export class Multiplier {
   static handle(...sources: Action[]): number {
     const result = sources.flat().reduce((acc, actionResult) => {
       if (typeof actionResult !== 'number') {
@@ -13,4 +13,3 @@ class Multiplier {
   }
 }
 
-export default Multiplier;
