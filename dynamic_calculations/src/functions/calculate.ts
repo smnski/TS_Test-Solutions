@@ -9,7 +9,9 @@ async function processRecursively(action: Action): Promise<any> {
     const childDataArray = await Promise.all(children.map(processRecursively));
 
     if (typeof action.handler === "function") {
-      return action.handler(...childDataArray);
+      const result = action.handler(...childDataArray);
+      action.result = result;
+      return result;
     } else {
       throw new Error(`Handler is not defined for action: ${action.id}`);
     }

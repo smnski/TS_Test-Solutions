@@ -8,14 +8,15 @@ export class Action {
   parentId?: string;
   role?: Role;
   handler?: (...sources: Action[]) => ResponseData | number;
-  result?: number;
+  result?: number | ResponseData;
   data?: ResponseData;
 
-  constructor(pk: string, parentPk: string | undefined, role: Role | undefined, handlerType: string, data?: ResponseData) {
+  constructor(pk: string, parentPk: string | undefined, role: Role | undefined, handlerType: string, result?: number | ResponseData, data?: ResponseData) {
     this.id = pk;
     this.parentId = parentPk;
     this.role = role;
     this.handler = HandlerAssigner.from(handlerType);
+    this.result = result;
     this.data = data;
   }
 
@@ -27,7 +28,7 @@ export class Action {
 
     const role = Role.from(res.Item.role);
 
-    return new Action(res.Item.pk, res.Item.parentPk, role, res.Item.handler, res.Item.data);
+    return new Action(res.Item.pk, res.Item.parentPk, role, res.Item.handler, res.Item.result, res.Item.data);
   }
 
   async getChildActions(): Promise<Action[]> {
@@ -44,7 +45,7 @@ export class Action {
 
     return res.Items.map((item) => {
       const childRole = Role.from(item.role);
-      return new Action(item.pk, item.parentPk, childRole, item.handler, item.data);
+      return new Action(item.pk, item.parentPk, childRole, item.handler, item.result, item.data);
     });
   }
 

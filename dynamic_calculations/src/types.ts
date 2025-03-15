@@ -21,5 +21,5 @@ export type ResponseData = {
   color?: string;
   image?: string;
   timestamp?: number;
-  result?: number;
+  result?: number | ResponseData;
 };
