@@ -1,4 +1,4 @@
-class Role {
+export class Role {
   static SYS_ADMIN = "sysadmin";
   static LOCAL_ADMIN = "localadmin";
   static ENTERPRISE_USER = "enterpriseuser";
@@ -14,5 +14,3 @@ class Role {
     }
   }
 }
-
-export default Role;

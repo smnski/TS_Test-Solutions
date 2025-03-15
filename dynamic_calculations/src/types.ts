@@ -1,18 +1,18 @@
 export type EventPayload = {
   Headers: {
-    userid: string;
+    userId: string;
   };
   body: string;
 };
 
 export type EventBody = {
-  actionid: string;
+  actionId: string;
 };
 
 export type ResponseType = {
   statusCode: number;
   body: {
-    timestamp?: Date;
+    timestamp?: string;
     color?: string;
     image?: string;
     result?: number;

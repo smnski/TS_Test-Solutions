@@ -1,31 +1,41 @@
-import { dbClient, TableNames } from "./src/common/db";
 import { EventPayload, ResponseType } from "./src/types";
-import authorize from "./src/authorize";
-import calculate from "./src/calculate";
+import { Action } from "./src/models/action";
+import { User } from "./src/models/user";
+import { authorize } from "./src/authorize";
+import { calculate } from "./src/calculate";
 
-// The event argument passed here:
-// {Headers: {userid: string}, body: string} - parsed body contains {actionid: string}
-const handler = async function (event): Promise<any> {
-  const headers = event.Headers;
-  const body = event.body;
+export async function firstActionHandler(event: EventPayload): Promise<ResponseType> {
 
-  const userid = headers.userid;
-  const { actionid } = JSON.parse(body);
+  const userId = event.Headers.userId;
+  const { actionId } = JSON.parse(event.body);
 
-  const authorizeResult = await authorize(userid, actionid);
+  const authorizeResult = await authorize(userId, actionId);
   if (!authorizeResult) {
-    return { statusCode: 403 };
+    return {
+      statusCode: 403,
+      body: {
+        message: "User is not authorized to perform this action",
+        timestamp: new Date().toISOString(),
+      },
+    }
   }
 
   try {
-    return await calculate(event);
+    const [userRes, actionRes] = await Promise.all([
+      User.getByPk(userId),
+      Action.getByPk(actionId),
+    ]);
+    return await calculate(actionRes, userRes);
+    
   } catch (error) {
-    console.error("Handler Error:", error);
+    console.error("Error interacting with the database: ", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Internal Server Error" }),
+      body: {
+        message: "Failed to fetch user or action data",
+        timestamp: new Date().toISOString(),
+      },
     };
   }
 };
 
-export default handler;

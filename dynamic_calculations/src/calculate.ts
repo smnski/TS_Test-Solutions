@@ -1,6 +1,7 @@
-import { EventPayload } from "./types";
+import { EventPayload, ResponseType } from "./types";
 import { Action } from "./models/action";
-import authorize from "./authorize";
+import { User } from "./models/user";
+import { authorize } from "./authorize";
 
 async function processRecursively(action: Action): Promise<any> {
   const children = await action.getChildActions();
@@ -20,7 +21,7 @@ async function processRecursively(action: Action): Promise<any> {
   }
 }
 
-async function calculate(event: EventPayload) {
+export async function calculate(action: Action, user: User) {
   const headers = event.Headers;
   const userid = headers.userid;
   const { actionid } = JSON.parse(event.body);
@@ -29,7 +30,14 @@ async function calculate(event: EventPayload) {
 
   const authorizeResult = await authorize(userid, actionid);
   if (!authorizeResult) {
-    return { statusCode: 403 };
+    return {
+      statusCode: 403,
+      body: {
+        error: "Forbidden",
+        details: "User is not authorized to perform this action",
+        timestamp: new Date(),
+      },
+    } as ResponseType;
   }
 
   const computedData = await processRecursively(action);
@@ -37,8 +45,6 @@ async function calculate(event: EventPayload) {
 
   return {
     statusCode: 200,
-    body: computedData,
-  };
+    body: { result: computedData },
+  } as ResponseType;
 }
-
-export default calculate;

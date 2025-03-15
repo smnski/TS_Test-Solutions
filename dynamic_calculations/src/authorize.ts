@@ -1,6 +1,6 @@
 import { User } from "./models/user";
 import { Action } from "./models/action";
-import Role from "./models/role";
+import { Role } from "./models/role";
 
 const RoleImportance = {
   [Role.BASIC_USER]: 0,
@@ -9,7 +9,7 @@ const RoleImportance = {
   [Role.SYS_ADMIN]: 3,
 };
 
-async function authorize(userId: string, actionId: string) {
+export async function authorize(userId: string, actionId: string) {
 
   const userRes = await User.getByPk(userId);
   const actionRes = await Action.getByPk(actionId);
@@ -20,5 +20,3 @@ async function authorize(userId: string, actionId: string) {
 
   return false;
 }
-
-export default authorize;
