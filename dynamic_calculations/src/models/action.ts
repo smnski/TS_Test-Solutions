@@ -11,16 +11,16 @@ export class Action {
   result?: number;
   data?: ResponseData;
 
-  constructor(id: string, parentId: string, role: Role, handlerType: string, data: ResponseData) {
-    this.id = id;
-    this.parentId = parentId;
+  constructor(pk: string, parentPk: string | undefined, role: Role, handlerType: string, data?: ResponseData) {
+    this.id = pk;
+    this.parentId = parentPk;
     this.role = role;
     this.handler = HandlerAssigner.from(handlerType);
     this.data = data;
   }
 
-  static async getById(id: string): Promise<Action> {
-    const res = await dbClient.get({ TableName: TableNames.actions, Key: { pk: id } }).promise();
+  static async getById(pk: string): Promise<Action> {
+    const res = await dbClient.get({ TableName: TableNames.actions, Key: { pk } }).promise();
     if (!res.Item) {
       throw new Error("Action does not exist");
     }
@@ -30,20 +30,28 @@ export class Action {
       throw new Error("Invalid role value");
     }
 
-    return new Action(res.Item.id, res.Item.parentId, role, res.Item.handler, res.Item.data);
+    return new Action(res.Item.pk, res.Item.parentPk, role, res.Item.handler, res.Item.data);
   }
 
   async getChildActions(): Promise<Action[]> {
     const res = await dbClient.query({
       TableName: TableNames.actions,
       IndexName: "parent-index",
-      KeyConditionExpression: 'parentPk = :parentPk',
-      ExpressionAttributeValues: { ':parentPk': this.id }
+      KeyConditionExpression: "parentPk = :parentPk",
+      ExpressionAttributeValues: { ":parentPk": this.id },
     }).promise();
+
     if (!res.Items || res.Items.length === 0) {
       return [];
     }
-    return res.Items.map(item => new Action(item.id, item.parentId, Role.from(item.role), item.handler, item.data));
+
+    return res.Items.map((item) => {
+      const childRole = Role.from(item.role);
+      if (!childRole) {
+        throw new Error("Invalid role value in child action");
+      }
+      return new Action(item.pk, item.parentPk, childRole, item.handler, item.data);
+    });
   }
 
   async getParentAction(): Promise<Action | null> {

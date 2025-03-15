@@ -7,7 +7,7 @@ import { calculate } from "./src/functions/calculate";
 export async function firstActionHandler(event: EventPayload): Promise<ResponseType> {
 
   const userId = event.Headers.userId;
-  const actionId = JSON.parse(event.body.actionId);
+  const actionId = event.body.actionId;
 
   const authorizeResult = await authorize(userId, actionId);
   console.log("authorizeResult: ", authorizeResult);
