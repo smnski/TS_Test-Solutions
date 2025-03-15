@@ -14,8 +14,8 @@ async function processRecursively(action: Action): Promise<any> {
       throw new Error(`Handler is not defined for action: ${action.id}`);
     }
   } else {
-    // if action doesn't have a handler, return its data
-    return action.data;
+    // if action doesn't have a handler, return it
+    return action;
   }
 }
 

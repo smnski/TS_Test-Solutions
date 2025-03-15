@@ -20,6 +20,6 @@ export type ResponseType = {
 export type ResponseData = {
   color?: string;
   image?: string;
-  timestamp?: string;
+  timestamp?: number;
   result?: number;
 };
