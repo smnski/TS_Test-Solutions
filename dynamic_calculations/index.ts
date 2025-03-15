@@ -13,9 +13,7 @@ export async function firstActionHandler(event: EventPayload): Promise<ResponseT
   if (!authorizeResult) {
     return {
       statusCode: 403,
-      body: {
-        message: "User is not authorized to perform this action",
-      },
+      body: { message: "User is not authorized to perform this action" },
     }
   }
 
@@ -30,9 +28,7 @@ export async function firstActionHandler(event: EventPayload): Promise<ResponseT
     console.error("Error interacting with the database: ", error);
     return {
       statusCode: 500,
-      body: {
-        message: "Failed to fetch user or action data",
-      },
+      body: { message: "Failed to fetch user or action data" },
     };
   }
 };

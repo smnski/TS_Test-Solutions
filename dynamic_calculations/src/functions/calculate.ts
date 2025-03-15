@@ -26,11 +26,9 @@ export async function calculate(action: Action, user: User) {
     return {
       statusCode: 403,
       body: {
-        error: "Forbidden",
-        details: "User is not authorized to perform this action",
-        timestamp: new Date(),
+        message: "User is not authorized to perform this action",
       },
-    } as ResponseType;
+    }
   }
 
   const computedData = await processRecursively(action);
@@ -38,5 +36,5 @@ export async function calculate(action: Action, user: User) {
   return {
     statusCode: 200,
     body: { result: computedData },
-  } as ResponseType;
+  }
 }
