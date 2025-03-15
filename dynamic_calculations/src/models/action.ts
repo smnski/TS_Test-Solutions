@@ -6,7 +6,7 @@ import { HandlerAssigner } from "../functions/handlerAssigner";
 export class Action {
   id: string;
   parentId: string;
-  role?: Role;
+  role: Role;
   handler?: (...sources: any[]) => { result: any };
   result?: number;
   data?: ResponseData;
