@@ -2,11 +2,11 @@ import { Action } from "../models/action";
 import { ResponseData } from "../types";
 
 class Newest {
-  static handle(...sources: Action[]): ResponseData {
+  static handle(...sources: ResponseData[]): ResponseData {
     return sources
       .reduce((latest, current) => {
-        const latestTimestamp = latest.data?.timestamp;
-        const currentTimestamp = current.data?.timestamp;
+        const latestTimestamp = latest.timestamp;
+        const currentTimestamp = current.timestamp;
 
         if (latestTimestamp === undefined || currentTimestamp === undefined) {
           throw new Error("Timestamp is missing in one of the ResponseData objects.");

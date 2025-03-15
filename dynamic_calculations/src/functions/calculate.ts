@@ -17,7 +17,7 @@ async function processRecursively(action: Action): Promise<any> {
     }
   } else {
     // if action doesn't have a handler, return it
-    return action;
+    return action.data;
   }
 }
 
