@@ -22,6 +22,6 @@ export class User {
       throw new Error("Invalid role value");
     }
 
-    return new User(res.Item.id, role);
+    return new User(res.Item.pk, role);
   }
 }

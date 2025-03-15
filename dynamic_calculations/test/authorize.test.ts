@@ -31,23 +31,4 @@ test("Allowed", async () => {
   });
 
   expect(statusCode).toBe(200);
-
-  // remove test items
-  await dbClient
-    .delete({
-      TableName: TableNames.users,
-      Key: {
-        pk: "123",
-      },
-    })
-    .promise();
-
-  await dbClient
-    .delete({
-      TableName: TableNames.actions,
-      Key: {
-        pk: "1",
-      },
-    })
-    .promise();
 });
