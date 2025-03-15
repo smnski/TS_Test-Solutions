@@ -1,7 +1,29 @@
 import { firstActionHandler } from "../index";
-import { test, expect } from "@jest/globals";
+import { test, expect, afterAll } from "@jest/globals";
 
 import { dbClient, TableNames, UserRoles } from "./../src/common/db";
+
+const testUsers = ["123", "234"];
+const testActions = ["1"];
+
+afterAll(async () => {
+  for (const userId of testUsers) {
+    await dbClient
+      .delete({
+        TableName: TableNames.users,
+        Key: { pk: userId },
+      })
+      .promise();
+  }
+  for (const actionId of testActions) {
+    await dbClient
+      .delete({
+        TableName: TableNames.actions,
+        Key: { pk: actionId },
+      })
+      .promise();
+  }
+});
 
 test("Allowed", async () => {
   await dbClient
@@ -31,25 +53,6 @@ test("Allowed", async () => {
   });
 
   expect(statusCode).toBe(200);
-
-  // remove test items
-  await dbClient
-    .delete({
-      TableName: TableNames.users,
-      Key: {
-        pk: "123",
-      },
-    })
-    .promise();
-
-  await dbClient
-    .delete({
-      TableName: TableNames.actions,
-      Key: {
-        pk: "1",
-      },
-    })
-    .promise();
 });
 
 test("Disallowed", async () => {
@@ -80,22 +83,4 @@ test("Disallowed", async () => {
   });
 
   expect(statusCode).toBe(403);
-
-  // remove test items
-  await dbClient
-    .delete({
-      TableName: TableNames.users,
-      Key: {
-        pk: "234",
-      },
-    })
-    .promise();
-  await dbClient
-    .delete({
-      TableName: TableNames.actions,
-      Key: {
-        pk: "1",
-      },
-    })
-    .promise();
 });
