@@ -1,7 +1,6 @@
 const { dbClient, TableNames } = require("../common/db");
-const Role = require("./role");
 
-class User {
+export class User {
   pk;
   role;
 
@@ -11,8 +10,7 @@ class User {
   }
 
   static async getByPk(pk) {
-    const res = (await dbClient.get({ TableName: TableNames.users, Key: { pk: pk } }).promise())
-      .Item;
+    const res = await dbClient.get({ TableName: TableNames.users, Key: { pk: pk } }).promise()
 
     if (!res.Item) {
       throw new Error("User does not exist");
@@ -21,5 +19,3 @@ class User {
     return new User(res.Item);
   }
 }
-
-module.exports = User;

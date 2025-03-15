@@ -9,9 +9,10 @@ const handler = async function (event): Promise<any> {
   const headers = event.Headers;
   const body = event.body;
 
-  // used for validation later
   const userid = headers.userid;
   const { actionid } = JSON.parse(body);
+
+  await authorize(userid);
 
   try {
     return await calculate(event);
