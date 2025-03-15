@@ -12,7 +12,10 @@ const handler = async function (event): Promise<any> {
   const userid = headers.userid;
   const { actionid } = JSON.parse(body);
 
-  await authorize(userid);
+  const authorizeResult = await authorize(userid, actionid);
+  if (!authorizeResult) {
+    return { statusCode: 403 };
+  }
 
   try {
     return await calculate(event);

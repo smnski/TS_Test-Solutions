@@ -1,4 +1,5 @@
 import { User } from "./models/user";
+import { Action } from "./models/action";
 import Role from "./models/role";
 
 const RoleImportance = {
@@ -8,12 +9,16 @@ const RoleImportance = {
   [Role.SYS_ADMIN]: 3,
 };
 
+async function authorize(userId: string, actionId: string) {
 
-async function authorize(userId: string) {
+  const userRes = await User.getByPk(userId);
+  const actionRes = await Action.getByPk(actionId);
 
-  const user = await User.getByPk(userId);
+  if (userRes && actionRes) {
+    return RoleImportance[userRes.role] >= RoleImportance[actionRes.role];
+  }
 
-  return true;
+  return false;
 }
 
 export default authorize;
