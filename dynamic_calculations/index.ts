@@ -15,7 +15,6 @@ export async function firstActionHandler(event: EventPayload): Promise<ResponseT
       statusCode: 403,
       body: {
         message: "User is not authorized to perform this action",
-        timestamp: new Date().toISOString(),
       },
     }
   }
@@ -33,7 +32,6 @@ export async function firstActionHandler(event: EventPayload): Promise<ResponseT
       statusCode: 500,
       body: {
         message: "Failed to fetch user or action data",
-        timestamp: new Date().toISOString(),
       },
     };
   }

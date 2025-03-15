@@ -10,7 +10,7 @@ export class User {
     this.role = role;
   }
 
-  static async getById(id: string) {
+  static async getById(id: string): Promise<User> {
     const res = await dbClient.get({ TableName: TableNames.users, Key: { pk: id } }).promise()
 
     if (!res.Item) {

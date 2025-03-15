@@ -1,5 +1,7 @@
+import { Action } from "../models/action";
+
 class Newest {
-  static handle(...sources) {
+  static handle(...sources: Action[]) {
     return sources
       .flat()
       .reduce((latest, current) => 

@@ -2,17 +2,16 @@ export type EventPayload = {
   Headers: {
     userId: string;
   };
-  body: EventBody;
+  body: EventPayloadBody;
 };
 
-type EventBody = {
+type EventPayloadBody = {
   actionId: string;
 };
 
 export type ResponseType = {
   statusCode: number;
   body: {
-    timestamp?: string;
     message?: string;
     data?: ResponseData;
   };
@@ -21,5 +20,6 @@ export type ResponseType = {
 export type ResponseData = {
   color?: string;
   image?: string;
-  result?: number;
+  timestamp?: string;
+  result?: number | ResponseData;
 };

@@ -6,8 +6,9 @@ import { HandlerAssigner } from "../functions/handlerAssigner";
 export class Action {
   id: string;
   parentId: string;
-  role: Role;
-  handler: (...sources: any[]) => { result: any };
+  role?: Role;
+  handler?: (...sources: any[]) => { result: any };
+  result?: number;
   data?: ResponseData;
 
   constructor(id: string, parentId: string, role: Role, handlerType: string, data: ResponseData) {
@@ -18,8 +19,8 @@ export class Action {
     this.data = data;
   }
 
-  static async getById(id: string) {
-    const res = await dbClient.get({ TableName: TableNames.actions, Key: { id } }).promise(); // should pk: id be here ?
+  static async getById(id: string): Promise<Action> {
+    const res = await dbClient.get({ TableName: TableNames.actions, Key: { id } }).promise();
     if (!res.Item) {
       throw new Error("Action does not exist");
     }
@@ -32,7 +33,7 @@ export class Action {
     return new Action(res.Item.id, res.Item.parentId, role, res.Item.handler, res.Item.data);
   }
 
-  async getChildActions() {
+  async getChildActions(): Promise<Action[]> {
     const res = await dbClient.query({
       TableName: TableNames.actions,
       IndexName: "parent-index",
@@ -45,7 +46,7 @@ export class Action {
     return res.Items.map(item => new Action(item.id, item.parentId, Role.from(item.role), item.handler, item.data));
   }
 
-  async getParentAction() {
+  async getParentAction(): Promise<Action | null> {
     if (!this.parentId) {
       return null;
     }
