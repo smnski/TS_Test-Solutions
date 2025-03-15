@@ -6,12 +6,12 @@ import { HandlerAssigner } from "../functions/handlerAssigner";
 export class Action {
   id: string;
   parentId?: string;
-  role: Role;
+  role?: Role;
   handler?: (...sources: Action[]) => ResponseData;
   result?: number;
   data?: ResponseData;
 
-  constructor(pk: string, parentPk: string | undefined, role: Role, handlerType: string, data?: ResponseData) {
+  constructor(pk: string, parentPk: string | undefined, role: Role | undefined, handlerType: string, data?: ResponseData) {
     this.id = pk;
     this.parentId = parentPk;
     this.role = role;
@@ -26,9 +26,6 @@ export class Action {
     }
 
     const role = Role.from(res.Item.role);
-    if (!role) {
-      throw new Error("Invalid role value");
-    }
 
     return new Action(res.Item.pk, res.Item.parentPk, role, res.Item.handler, res.Item.data);
   }
@@ -47,9 +44,6 @@ export class Action {
 
     return res.Items.map((item) => {
       const childRole = Role.from(item.role);
-      if (!childRole) {
-        throw new Error("Invalid role value in child action");
-      }
       return new Action(item.pk, item.parentPk, childRole, item.handler, item.data);
     });
   }

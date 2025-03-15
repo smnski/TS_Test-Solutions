@@ -10,7 +10,7 @@ export class Role {
       case Role.LOCAL_ADMIN: return Role.LOCAL_ADMIN;
       case Role.ENTERPRISE_USER: return Role.ENTERPRISE_USER;
       case Role.BASIC_USER: return Role.BASIC_USER;
-      default: throw new Error("Invalid role value");
+      default: return undefined;
     }
   }
 }

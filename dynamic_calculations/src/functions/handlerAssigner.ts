@@ -7,6 +7,6 @@ export class HandlerAssigner {
     if (input === "COUNTER") return Counter.handle;
     if (input === "NEWEST") return Newest.handle;
     if (input === "MULTIPLIER") return Multiplier.handle;
-    throw new Error(`Invalid handler type: ${input}`);
+    return undefined;
   }
 }

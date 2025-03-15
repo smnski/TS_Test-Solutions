@@ -1,4 +1,4 @@
-import handler from "../index";
+import { firstActionHandler } from "../index";
 import { beforeAll, afterAll, test, expect } from "@jest/globals";
 import { dbClient, TableNames, UserRoles } from "./../src/common/db";
 
@@ -102,10 +102,11 @@ test("Some items to count", async () => {
     })
     .promise();
 
-  const { body } = await handler({
-    Headers: { userid: "123" },
-    body: JSON.stringify({ actionid: "1" }),
+  const { body } = await firstActionHandler({
+    Headers: { userId: "123" },
+    body: { actionId: "1" },
   });
 
-  expect(body).toStrictEqual({ result: 2 });
+  console.log("body: ", body);
+  expect(body.data).toStrictEqual({ result: 2 });
 });
