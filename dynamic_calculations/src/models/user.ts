@@ -2,16 +2,16 @@ const { dbClient, TableNames } = require("../common/db");
 const Role = require("./role");
 
 class User {
-  id;
+  pk;
   role;
 
   constructor(input) {
-    this.id = input.id;
-    this.role = Role.from(input.role);
+    this.pk = input.pk;
+    this.role = input.role;
   }
 
-  static async getById(id) {
-    const res = (await dbClient.get({ TableName: TableNames.users, Key: { pk: id } }).promise())
+  static async getByPk(pk) {
+    const res = (await dbClient.get({ TableName: TableNames.users, Key: { pk: pk } }).promise())
       .Item;
 
     if (!res.Item) {

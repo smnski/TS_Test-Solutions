@@ -12,7 +12,7 @@ export class Action {
   constructor(input) {
     this.pk = input.pk;
     this.parentPk = input.parentPk;
-    this.role = Role.from(input.role);
+    this.role = input.role;
     this.handler = HandlerAssigner.from(input.handler);
     this.data = input.data;
   }

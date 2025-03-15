@@ -1,14 +1,17 @@
 class Role {
-  static SYS_ADMIN = Symbol("sysadmin");
-  static LOCAL_ADMIN = Symbol("localadmin");
-  static ENTERPRISE_USER = Symbol("enterpriseuser");
-  static BASIC_USER = Symbol("basicuser");
+  static SYS_ADMIN = "sysadmin";
+  static LOCAL_ADMIN = "localadmin";
+  static ENTERPRISE_USER = "enterpriseuser";
+  static BASIC_USER = "basicuser";
 
-  static from(input) {
-    if (input === Role.SYS_ADMIN.description) return Role.SYS_ADMIN;
-    if (input === Role.LOCAL_ADMIN.description) return Role.LOCAL_ADMIN;
-    if (input === Role.ENTERPRISE_USER.description) return Role.ENTERPRISE_USER;
-    if (input === Role.BASIC_USER.description) return Role.BASIC_USER;
+  static from(input: string) {
+    switch (input) {
+      case Role.SYS_ADMIN: return Role.SYS_ADMIN;
+      case Role.LOCAL_ADMIN: return Role.LOCAL_ADMIN;
+      case Role.ENTERPRISE_USER: return Role.ENTERPRISE_USER;
+      case Role.BASIC_USER: return Role.BASIC_USER;
+      default: return undefined;
+    }
   }
 }
 
