@@ -5,7 +5,7 @@ import { HandlerAssigner } from "../functions/handlerAssigner";
 
 export class Action {
   id: string;
-  parentId: string;
+  parentId?: string;
   role: Role;
   handler?: (...sources: Action[]) => ResponseData;
   result?: number;
@@ -20,7 +20,7 @@ export class Action {
   }
 
   static async getById(id: string): Promise<Action> {
-    const res = await dbClient.get({ TableName: TableNames.actions, Key: { id } }).promise();
+    const res = await dbClient.get({ TableName: TableNames.actions, Key: { pk: id } }).promise();
     if (!res.Item) {
       throw new Error("Action does not exist");
     }
