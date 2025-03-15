@@ -1,21 +1,27 @@
 const { dbClient, TableNames } = require("../common/db");
+import { Role } from "./role";
 
 export class User {
-  pk;
-  role;
+  id: string;
+  role: Role;
 
-  constructor(input) {
-    this.pk = input.pk;
-    this.role = input.role;
+  constructor(id: string, role: Role) {
+    this.id = id;
+    this.role = role;
   }
 
-  static async getByPk(pk) {
-    const res = await dbClient.get({ TableName: TableNames.users, Key: { pk: pk } }).promise()
+  static async getById(id: string) {
+    const res = await dbClient.get({ TableName: TableNames.users, Key: { pk: id } }).promise()
 
     if (!res.Item) {
       throw new Error("User does not exist");
     }
 
-    return new User(res.Item);
+    const role = Role.from(res.Item.role);
+    if (!role) {
+      throw new Error("Invalid role value");
+    }
+
+    return new User(res.Item.id, role);
   }
 }

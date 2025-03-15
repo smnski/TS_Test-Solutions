@@ -1,6 +1,6 @@
-import { EventPayload, ResponseType } from "./types";
-import { Action } from "./models/action";
-import { User } from "./models/user";
+import { EventPayload, ResponseType } from "../types";
+import { Action } from "../models/action";
+import { User } from "../models/user";
 import { authorize } from "./authorize";
 
 async function processRecursively(action: Action): Promise<any> {

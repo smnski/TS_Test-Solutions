@@ -1,28 +1,35 @@
-import Role from "./role";
+import { Role } from "./role";
+import { ResponseData } from "../types";
 import { dbClient, TableNames } from "../common/db";
-import HandlerAssigner from "../handlers/handlerAssigner";
+import { HandlerAssigner } from "../functions/handlerAssigner";
 
 export class Action {
-  pk;
-  parentPk;
-  role;
-  handler;
-  data;
+  id: string;
+  parentId: string;
+  role: Role;
+  handler: (...sources: any[]) => { result: any };
+  data?: ResponseData;
 
-  constructor(input) {
-    this.pk = input.pk;
-    this.parentPk = input.parentPk;
-    this.role = input.role;
-    this.handler = HandlerAssigner.from(input.handler);
-    this.data = input.data;
+  constructor(id: string, parentId: string, role: Role, handlerType: string, data: ResponseData) {
+    this.id = id;
+    this.parentId = parentId;
+    this.role = role;
+    this.handler = HandlerAssigner.from(handlerType);
+    this.data = data;
   }
 
-  static async getByPk(pk) {
-    const res = await dbClient.get({ TableName: TableNames.actions, Key: { pk } }).promise();
+  static async getById(id: string) {
+    const res = await dbClient.get({ TableName: TableNames.actions, Key: { id } }).promise(); // should pk: id be here ?
     if (!res.Item) {
       throw new Error("Action does not exist");
     }
-    return new Action(res.Item);
+
+    const role = Role.from(res.Item.role);
+    if (!role) {
+      throw new Error("Invalid role value");
+    }
+
+    return new Action(res.Item.id, res.Item.parentId, role, res.Item.handler, res.Item.data);
   }
 
   async getChildActions() {
@@ -30,23 +37,22 @@ export class Action {
       TableName: TableNames.actions,
       IndexName: "parent-index",
       KeyConditionExpression: 'parentPk = :parentPk',
-      ExpressionAttributeValues: { ':parentPk': this.pk }
+      ExpressionAttributeValues: { ':parentPk': this.id }
     }).promise();
     if (!res.Items || res.Items.length === 0) {
       return [];
     }
-    console.log("Query results for parentPk = ", this.pk, ": ", res.Items);
-    return res.Items.map(item => new Action(item));
+    return res.Items.map(item => new Action(item.id, item.parentId, Role.from(item.role), item.handler, item.data));
   }
 
   async getParentAction() {
-    if (!this.parentPk) {
+    if (!this.parentId) {
       return null;
     }
     try {
-      return await Action.getByPk(this.parentPk);
-    } catch (error) {
-      if (error.message === "Action does not exist") {
+      return await Action.getById(this.parentId);
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === "Action does not exist") {
         return null;
       }
       throw error;
