@@ -34,7 +34,6 @@ export async function calculate(action: Action, user: User) {
   }
 
   const computedData = await processRecursively(action);
-  console.log("computed data: ", computedData);
 
   return {
     statusCode: 200,

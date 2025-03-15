@@ -10,7 +10,6 @@ export async function firstActionHandler(event: EventPayload): Promise<ResponseT
   const actionId = event.body.actionId;
 
   const authorizeResult = await authorize(userId, actionId);
-  console.log("authorizeResult: ", authorizeResult);
   if (!authorizeResult) {
     return {
       statusCode: 403,
