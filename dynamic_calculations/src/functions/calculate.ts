@@ -1,4 +1,3 @@
-import { EventPayload, ResponseType } from "../types";
 import { Action } from "../models/action";
 import { User } from "../models/user";
 import { authorize } from "./authorize";
@@ -15,6 +14,7 @@ async function processRecursively(action: Action): Promise<any> {
       throw new Error(`Handler is not defined for action: ${action.id}`);
     }
   } else {
+    // if action doesn't have a handler, return its data
     return action.data;
   }
 }
@@ -32,9 +32,10 @@ export async function calculate(action: Action, user: User) {
   }
 
   const computedData = await processRecursively(action);
+  action.result = computedData;
 
   return {
     statusCode: 200,
-    body: { result: computedData },
+    body: { result: action.result },
   }
 }

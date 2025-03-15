@@ -107,6 +107,5 @@ test("Some items to count", async () => {
     body: { actionId: "1" },
   });
 
-  console.log("body: ", body);
-  expect(body.data).toStrictEqual({ result: 2 });
+  expect(body).toStrictEqual( { result: 2 } );
 });
