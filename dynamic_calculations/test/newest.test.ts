@@ -95,7 +95,7 @@ test("Some items to count", async () => {
     body: { actionId: "1" },
   });
 
-  expect(body).toStrictEqual({
+  expect(body.data).toStrictEqual({
     result: {
       timestamp: new Date(2023, 1, 1).getTime(),
       color: "yellow",

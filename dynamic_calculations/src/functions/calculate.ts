@@ -38,6 +38,6 @@ export async function calculate(action: Action, user: User) {
 
   return {
     statusCode: 200,
-    body: { result: action.result },
+    body: { data: { result: action.result } },
   }
 }
