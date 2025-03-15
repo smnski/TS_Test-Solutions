@@ -1,16 +1,20 @@
+import { Action } from "../models/action";
 import { ResponseData } from "../types";
 
 class Newest {
-  static handle(...sources: ResponseData[]) {
+  static handle(...sources: Action[]): ResponseData {
     return sources
       .flat()
       .reduce((latest, current) => {
-        if (latest.timestamp === undefined || current.timestamp === undefined) {
+        const latestTimestamp = latest.data?.timestamp;
+        const currentTimestamp = current.data?.timestamp;
+
+        if (latestTimestamp === undefined || currentTimestamp === undefined) {
           throw new Error("Timestamp is missing in one of the ResponseData objects.");
         }
 
-        return latest.timestamp > current.timestamp ? latest : current;
-      }, { timestamp: "" } as ResponseData);
+        return latestTimestamp > currentTimestamp ? latest : current;
+      }).data!;
   }
 }
 

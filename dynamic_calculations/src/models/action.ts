@@ -7,7 +7,7 @@ export class Action {
   id: string;
   parentId: string;
   role: Role;
-  handler?: (...sources: any[]) => { result: any };
+  handler?: (...sources: Action[]) => ResponseData;
   result?: number;
   data?: ResponseData;
 
