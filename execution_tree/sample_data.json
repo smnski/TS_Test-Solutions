@@ -3,13 +3,7 @@
   "left": {
     "action": "+",
     "left": {
-      "action": "+",
-      "left": {
-        "value": 3
-      },
-      "right": {
-        "value": 1
-      }
+      "value": 3
     },
     "right": {
       "value": 1

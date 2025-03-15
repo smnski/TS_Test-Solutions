@@ -1,4 +1,3 @@
-import { Action } from "../models/action";
 import { ResponseData } from "../types";
 
 class Newest {
