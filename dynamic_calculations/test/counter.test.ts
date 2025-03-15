@@ -19,7 +19,7 @@ beforeAll(async () => {
       Item: {
         pk: "1",
         handler: "COUNTER",
-        ROLE: UserRoles.basicuser,
+        role: UserRoles.basicuser,
       },
     })
     .promise();
@@ -63,6 +63,7 @@ test("Some items to count", async () => {
         pk: "3",
         parentPk: "1",
         handler: "COUNTER",
+        role: UserRoles.basicuser,
         data: {},
       },
     })

@@ -1,6 +1,6 @@
 import { EventPayload } from "./types";
 import { Action } from "./models/action";
-import { dbClient, TableNames } from "./common/db"; //debug
+import authorize from "./authorize";
 
 async function processRecursively(action: Action): Promise<any> {
   const children = await action.getChildActions();
@@ -21,8 +21,17 @@ async function processRecursively(action: Action): Promise<any> {
 }
 
 async function calculate(event: EventPayload) {
+  const headers = event.Headers;
+  const userid = headers.userid;
   const { actionid } = JSON.parse(event.body);
   const action = await Action.getByPk(actionid);
+  console.log("actionid: ", actionid);
+
+  const authorizeResult = await authorize(userid, actionid);
+  if (!authorizeResult) {
+    return { statusCode: 403 };
+  }
+
   const computedData = await processRecursively(action);
   console.log("computed data: ", computedData);
 

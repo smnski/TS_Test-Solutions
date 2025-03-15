@@ -24,9 +24,10 @@ enum TableNames {
 }
 
 enum UserRoles {
-  basicuser = "basicuser",
   sysadmin = "sysadmin",
-  enterprise = "enterpriseuser",
+  localadmin = "localadmin",
+  basicuser = "basicuser",
+  enterprise = "enterpriseuser"
 }
 
 export { dbClient, TableNames, UserRoles };
