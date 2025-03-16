@@ -71,7 +71,6 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // Delete test data after the test completes
   const deleteItems = [
     { TableName: TableNames.users, Key: { pk: "123" } },
     { TableName: TableNames.actions, Key: { pk: "1" } },
