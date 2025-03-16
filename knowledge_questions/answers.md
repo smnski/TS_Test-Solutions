@@ -57,7 +57,7 @@ However, if possible I most commonly use:
 - Socket.IO - For real-time, bidirectional communication between clients and servers.
 
 ### How would you choose a backend? When would you use HTTP server, serverless functions or Websockets?
-1. I would use an HTTP server in applications utilizing REST APIs. This is my prefered choice, when building backend for projects based
+1. I would use an HTTP server in applications utilizing REST APIs. This is my preferred choice, when building backend for projects based
   on request-response principles.
 
 2. I would use serverless functions when dealing with lightweight applications that are event-driven. This approach is best suited for
@@ -131,7 +131,7 @@ result:
 ```
 
 #### Other possible solutions
-1. Using ```bind``` to make sure ```this``` always refers to this specific IdGenerator instane:
+1. Using ```bind``` to make sure ```this``` always refers to this specific IdGenerator instance:
 ```ts
 const { getId } = new IdGenerator();
 const boundGetId = getId.bind(new IdGenerator());
