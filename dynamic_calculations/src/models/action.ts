@@ -7,7 +7,10 @@ export class Action {
   id: string;
   parentId?: string;
   role?: Role;
-  handler?: (...sources: any) => ActionData | number;
+  handler?: 
+    | ((...sources: ActionData[]) => ActionData) // newest
+    | ((...sources: number[]) => number) // multiplier
+    | ((...sources: (ActionData | number)[]) => number); // counter
   result?: number | ActionData;
   data?: ActionData;
 
