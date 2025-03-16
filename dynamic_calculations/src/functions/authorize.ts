@@ -14,6 +14,10 @@ export async function authorize(userId: string, actionId: string) {
   const userRes = await User.getById(userId);
   const actionRes = await Action.getById(actionId);
 
+  if(!actionRes.role) {
+    return true;
+  }
+
   if (userRes && actionRes) {
     return RoleImportance[userRes.role as string] >= RoleImportance[actionRes.role as string];
   }

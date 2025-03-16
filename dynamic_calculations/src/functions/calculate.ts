@@ -1,45 +1,49 @@
 import { Action } from "../models/action";
-import { ActionData } from "../types";
+import { ActionData, ResponseBodyType } from "../types";
 import { User } from "../models/user";
 import { authorize } from "./authorize";
 
-async function processRecursively(action: Action): Promise<ActionData> {
+async function processRecursively(action: Action, user: User): Promise<ActionData> {
+  // This would be here assuming user must be authorized to perform every child action of requested action as well.
+  // Currently, this authorization check is commented out, so child actions are not being checked.  
+  // const authorizeResult = await authorize(user.id, action.id);
+  // if (!authorizeResult) {
+  //   throw new AuthorizationError("Authorization failed. User not authorized.");
+  // }
+  
   const children = await action.getChildActions();
 
   if (children.length > 0) {
-    const childDataArray = await Promise.all(children.map(processRecursively));
+    const childDataArray = await Promise.all(children.map(child => processRecursively(child, user)));
 
     if (typeof action.handler === "function") {
       const result = action.handler(...childDataArray);
-      action.result = result; // This isn't needed for this task, but I assumed each action should save its result for later use just in case.
+      action.result = result;
       return result;
     } else {
       throw new Error(`Handler is not defined for action: ${action.id}`);
     }
   } else {
     // If action doesn't have a handler, return its data.
-    // Some actions can have empty data, as seen in the readme file.
-    return action.data? action.data : {};
+    return action.data ? action.data : {};
   }
 }
 
-export async function calculate(action: Action, user: User) {
-
+export async function calculate(action: Action, user: User): Promise<ResponseBodyType> {
+  // Assuming we only check the user's authorization for the requested action, 
+  // and not for any child actions (as stated in the README).
   const authorizeResult = await authorize(user.id, action.id);
   if (!authorizeResult) {
-    return {
-      statusCode: 403,
-      body: {
-        message: "User is not authorized to perform this action",
-      },
-    }
+    throw new AuthorizationError("Authorization failed. User not authorized.");
   }
-
-  const computedData = await processRecursively(action);
+  const computedData = await processRecursively(action, user);
   action.result = computedData;
+  return action.result;
+}
 
-  return {
-    statusCode: 200,
-    body: action.result,
+export class AuthorizationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AuthorizationError";
   }
 }

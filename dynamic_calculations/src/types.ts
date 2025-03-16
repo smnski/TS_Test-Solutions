@@ -11,14 +11,16 @@ type EventPayloadBody = {
 
 export type ResponseType = {
   statusCode: number;
-  body: {
-    message?: string;
-    result?: number;
-    timestamp?: number;
-    color?: string;
-    image?: string;
-  };
+  body: ResponseBodyType;
 };
+
+export type ResponseBodyType = {
+  message?: string;
+  result?: number;
+  timestamp?: number;
+  color?: string;
+  image?: string;
+}
 
 export type ActionData = {
   result?: number;
