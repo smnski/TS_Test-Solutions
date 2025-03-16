@@ -2,7 +2,7 @@ import { ActionData } from "../types";
 
 export class Multiplier {
   static handle(...sources: ActionData[]): ActionData {
-    const result = sources.flat().reduce((acc, actionResult) => {
+    const multiplicationResult = sources.flat().reduce((acc, actionResult) => {
       
       const value = actionResult.result;
       if (typeof value !== 'number') {
@@ -12,6 +12,6 @@ export class Multiplier {
       return acc * value;
     }, 1);
 
-    return { result: result };
+    return { result: multiplicationResult };
   }
 }
