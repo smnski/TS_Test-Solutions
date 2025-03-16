@@ -9,17 +9,13 @@ const RoleImportance: Record<string, number> = {
   [Role.SYS_ADMIN]: 3,
 };
 
-export async function authorize(userId: string, actionId: string) {
-
-  const userRes = await User.getById(userId);
-  const actionRes = await Action.getById(actionId);
-
-  if(!actionRes.role) {
+export async function authorize(action: Action, user: User) {
+  if (!action.role) {
     return true;
   }
 
-  if (userRes && actionRes) {
-    return RoleImportance[userRes.role as string] >= RoleImportance[actionRes.role as string];
+  if (user.role) {
+    return RoleImportance[user.role as string] >= RoleImportance[action.role as string];
   }
 
   return false;

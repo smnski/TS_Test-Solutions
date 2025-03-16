@@ -32,7 +32,7 @@ async function processRecursively(action: Action, user: User): Promise<ActionDat
 export async function calculate(action: Action, user: User): Promise<ResponseBodyType> {
   // Assuming we only check the user's authorization for the requested action, 
   // and not for any child actions (as stated in the README).
-  const authorizeResult = await authorize(user.id, action.id);
+  const authorizeResult = await authorize(action, user);
   if (!authorizeResult) {
     throw new AuthorizationError("Authorization failed. User not authorized.");
   }
