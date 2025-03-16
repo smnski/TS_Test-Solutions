@@ -3,15 +3,15 @@ import { ActionData } from "../types";
 import { User } from "../models/user";
 import { authorize } from "./authorize";
 
-async function processRecursively(action: Action): Promise<ActionData | number> {
+async function processRecursively(action: Action): Promise<ActionData> {
   const children = await action.getChildActions();
 
   if (children.length > 0) {
-    const childDataArray: any = await Promise.all(children.map(processRecursively));
+    const childDataArray = await Promise.all(children.map(processRecursively));
 
     if (typeof action.handler === "function") {
       const result = action.handler(...childDataArray);
-      action.result = result;
+      action.result = result; // This isn't needed for this task, but I assumed each action should save its result for later use just in case.
       return result;
     } else {
       throw new Error(`Handler is not defined for action: ${action.id}`);
@@ -19,7 +19,7 @@ async function processRecursively(action: Action): Promise<ActionData | number> 
   } else {
     // If action doesn't have a handler, return its data.
     // Some actions can have empty data, as seen in the readme file.
-    return action.data ? action.data : {};
+    return action.data? action.data : {};
   }
 }
 
@@ -40,6 +40,6 @@ export async function calculate(action: Action, user: User) {
 
   return {
     statusCode: 200,
-    body: { result: action.result },
+    body: action.result,
   }
 }

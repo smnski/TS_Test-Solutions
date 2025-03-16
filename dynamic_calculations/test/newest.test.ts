@@ -96,10 +96,8 @@ test("Some items to count", async () => {
   });
 
   expect(body).toStrictEqual({
-    result: {
       timestamp: new Date(2023, 1, 1).getTime(),
       color: "yellow",
       image: "none",
-    }
    });
 });

@@ -7,14 +7,11 @@ export class Action {
   id: string;
   parentId?: string;
   role?: Role;
-  handler?: 
-    | ((...sources: ActionData[]) => ActionData) // newest
-    | ((...sources: number[]) => number) // multiplier
-    | ((...sources: (ActionData | number)[]) => number); // counter
-  result?: number | ActionData;
+  handler?: ((...sources: ActionData[]) => ActionData)
+  result?: ActionData;
   data?: ActionData;
 
-  constructor(pk: string, parentPk: string | undefined, role: Role | undefined, handlerType: string, result?: number | ActionData, data?: ActionData) {
+  constructor(pk: string, parentPk: string | undefined, role: Role | undefined, handlerType: string, result?: ActionData, data?: ActionData) {
     this.id = pk;
     this.parentId = parentPk;
     this.role = role;
