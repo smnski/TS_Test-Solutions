@@ -54,6 +54,7 @@ However, if possible I most commonly use:
 - Express - For HTTP server routing.
 - Bootstrap - For designing responsive frontend.
 - Mongoose - For simplifed database management in projects that utilize MongoDB.
+- Socket.IO - For real-time, bidirectional communication between clients and servers.
 
 ### How would you choose a backend? When would you use HTTP server, serverless functions or Websockets?
 1. I would use an HTTP server in applications utilizing REST APIs. This is my prefered choice, when building backend for projects based
