@@ -1,9 +1,7 @@
-import { Action } from "../models/action";
+import { ActionData } from "../types";
 
 export class Counter {
-  static handle(...sources: Action[]): number {
-    const result = sources.reduce((acc, curr) => acc + 1, 0);
-
-    return result;
+  static handle(...sources: (ActionData | number)[]): number {
+    return sources.length;
   }
 }

@@ -1,5 +1,5 @@
 import { Role } from "./role";
-import { ResponseData } from "../types";
+import { ActionData } from "../types";
 import { dbClient, TableNames } from "../common/db";
 import { HandlerAssigner } from "../functions/handlerAssigner";
 
@@ -7,11 +7,11 @@ export class Action {
   id: string;
   parentId?: string;
   role?: Role;
-  handler?: (...sources: Action[]) => ResponseData | number;
-  result?: number | ResponseData;
-  data?: ResponseData;
+  handler?: (...sources: any) => ActionData | number;
+  result?: number | ActionData;
+  data?: ActionData;
 
-  constructor(pk: string, parentPk: string | undefined, role: Role | undefined, handlerType: string, result?: number | ResponseData, data?: ResponseData) {
+  constructor(pk: string, parentPk: string | undefined, role: Role | undefined, handlerType: string, result?: number | ActionData, data?: ActionData) {
     this.id = pk;
     this.parentId = parentPk;
     this.role = role;

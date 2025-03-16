@@ -1,7 +1,7 @@
-import { ResponseData } from "../types";
+import { ActionData } from "../types";
 
 export class Newest {
-  static handle(...sources: ResponseData[]): ResponseData {
+  static handle(...sources: ActionData[]): ActionData {
     return sources
       .reduce((latest, current) => {
         const latestTimestamp = latest.timestamp;

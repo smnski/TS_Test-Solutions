@@ -13,13 +13,12 @@ export type ResponseType = {
   statusCode: number;
   body: {
     message?: string;
-    data?: ResponseData;
+    result?: number | ActionData;
   };
 };
 
-export type ResponseData = {
+export type ActionData = {
   color?: string;
   image?: string;
   timestamp?: number;
-  result?: number | ResponseData;
 };
